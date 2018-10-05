@@ -1,0 +1,102 @@
+
+Quick'n'Dirty Masternode Hot Wallet Setup Guide for Linux Virtual Private Servers (VPS)
+============================================================================
+
+
+
+DISCLAIMER: Running a hot wallet masternode means that your coins are on your VPS.  If someone gets access to your VPS they will be able to steal your coins.  Make sure this is what you want to do.  You can also run a cold/hot setup which removed that issue.  In some situations you want to run a hot wallet setup.  This is what this guide is for.
+
+
+
+1.  GET A VPS
+-------------
+
+Get a Virtual Private Server.  AWS, Vultr, A2Hosting are decent choices.  (Register here: https://www.vultr.com/?ref=7537943 )   To compile the source you'll need 1 GB of RAM.  You can compile with 512 Mb of RAM and a swap file, but it will be very very slow and will require additional skills to set up a swap file.
+
+It is best to get a VPS with 1 GB RAM.  With AWS you can first create a VPS with 1 GB RAM, compile / install everything, then change the instance type to "nano" with 512 Mb of RAM which will cost a bit less.
+
+All in all, you should not pay more than $10 USD per month for the server.
+
+The best OS for the VPS is Debian Stretch or newer.  You can get Ubuntu, it will works just as well.
+
+
+
+
+2.  INSTALL THE PREREQUISITES
+-----------------------------
+
+To compile MIRAGE you'll need to install some libraries and software first.
+
+sudo apt-get update && apt-get upgrade && apt-get dist-upgrade
+sudo apt-get install libminiupnpc-dev libdb++-dev autoconf pkg-config
+sudo apt-get install libdb++-dev libevent-dev libzmq3-dev libreadline-dev
+sudo apt-get install mc gcc g++ cmake git libboost-all-dev ntp libcap2-bin redis-server screen libgmp3-dev
+
+
+
+3.  COMPILE MIRAGE
+---------------
+
+git clone https://github.com/x3c/mirage
+cd mirage/src
+make -f makefile.unix
+
+
+After this, you should end up with a binary called MIRAGEd
+
+
+
+4.  SETUP MIRAGE.conf
+-----------------
+
+- Run MIRAGEd
+It will exit saying that you need to set an RPC user / password
+- edit ~/.MIRAGE/MIRAGE.conf
+- add the following lines to it:
+rpcuser=<some_random_junk>
+rpcpassword=<some_other_random_junk>
+
+
+
+5.  SYNC THE BLOCKCHAIN
+-----------------------
+
+- run screen (will allow you to let the MIRAGE process running after you disconnect your SSH session)
+- in screen, run MIRAGEd
+- let it run for a while, monitor ~/.MIRAGE/debug.log with the tail command to see what's going on
+- when the block count seems to match what's on the explorer - go to the next step
+
+
+
+6.  SETUP THE MASTERNODE
+------------------------
+
+
+Step 6a) While the MIRAGEd daemon is running, issue the command ./MIRAGEd getaccountaddress ""
+Step 6b) Issue the command ./MIRAGEd dumpprivkey <result of step 6a>
+Write down <result of step 6b> in a SAFE PLACE.
+
+Step 6c) Send exactly 300000 (three hundred thousand) MIRAGE to <result of step 6a>, and wait for 15 confirmations
+Step 6d) On the server, issue the command ./MIRAGEd masternode outputs
+Step 6e) Find out the PUBLIC! IP address of your VPS.
+Step 6f) Make sure the TCP port 40404 of your VPS server is accessible from the Internet by everyone.
+Step 6g) Issue the command ./MIRAGEd masternode genkey
+Step 6h) edit ~/.MIRAGE/masternode.conf, and put in the following line as the first and only line:
+MN <result of step 6e>:40404 <result of step 6g> <result of step 6d>
+- Note that the result of step 6d should have the dash character (-) replaced by a space.  Do not forget to do that.
+
+Step 6i) Save masternode.conf and edit ~/.MIRAGE/MIRAGE.conf.  Add the following lines:
+masternode=1
+masternodeprivkey=<result of step 6g>
+masternodeaddr=<result of step 6e>:40404
+externalip=<result of step 6e>
+logtimstamps=1
+
+Step 6j) Save the MIRAGE.conf file and restart the MIRAGEd process.
+
+Monitor the debug.log file and see if your masternode has started properly.
+If so, you should be able to see your masternode in the list when you issue the following command:
+./MIRAGEd masternode list
+
+
+

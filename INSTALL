@@ -1,0 +1,9 @@
+Building MIRAGE
+
+See doc/readme-qt.rst for instructions on building MIRAGE QT,
+the intended-for-end-users, nice-graphical-interface, reference
+implementation of MIRAGE.
+
+See doc/build-*.txt for instructions on building MIRAGEd,
+the intended-for-services, no-graphical-interface, reference
+implementation of MIRAGE.
