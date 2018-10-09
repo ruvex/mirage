@@ -14,7 +14,7 @@
 static const int CLIENT_VERSION =
                            1000000 * CLIENT_VERSION_MAJOR
                          +   10000 * CLIENT_VERSION_MINOR
-                         +     200 * CLIENT_VERSION_REVISION
+                         +     100 * CLIENT_VERSION_REVISION
                          +       0 * CLIENT_VERSION_BUILD;
 
 extern const std::string CLIENT_NAME;
@@ -30,7 +30,7 @@ static const int DATABASE_VERSION = 70509;
 // network protocol versioning
 //
 
-static const int PROTOCOL_VERSION = 65002;
+static const int PROTOCOL_VERSION = 65003;
 
 // intial proto version, to be increased after version/verack negotiation
 static const int INIT_PROTO_VERSION = 209;
