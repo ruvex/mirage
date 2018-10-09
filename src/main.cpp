@@ -1376,6 +1376,13 @@ int64_t GetProofOfStakeReward(const CBlockIndex* pindexPrev, int64_t nCoinAge, i
 
 	nSubsidy = 400 * COIN;
 
+	if (nHeight >= 100000) {
+		nSubsidy = 10 * COIN;
+	} 
+
+
+
+
 	return nSubsidy + nFees;
 }
 
