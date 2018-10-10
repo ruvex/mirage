@@ -41,7 +41,7 @@ QString BitcoinUnits::name(int unit)
 {
     switch(unit)
     {
-    case BTC: return QString("MIRAGE");
+    case BTC: return QString("MRG");
   //  case mBTC: return QString("mMIRAGE");
    // case uBTC: return QString::fromUtf8("μMIRAGE");
     default: return QString("???");
@@ -52,7 +52,7 @@ QString BitcoinUnits::description(int unit)
 {
     switch(unit)
     {
-    case BTC: return QString("MIRAGEs");
+    case BTC: return QString("MRGs");
 //    case mBTC: return QString("Milli-MIRAGEs (1 / 1,000)");
  //   case uBTC: return QString("Micro-MIRAGEs (1 / 1,000,000)");
     default: return QString("???");
